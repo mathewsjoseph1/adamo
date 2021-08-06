@@ -7,14 +7,20 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.ListView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import java.util.ArrayList;
 
 public class my_music extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ListView listView;
+
+        ArrayList<String> list;
         setContentView(R.layout.activity_my_music);
 
         /*for (int i = 0; i < PlaySongActivity.playList.size(); i++){
@@ -46,5 +52,25 @@ public class my_music extends AppCompatActivity {
                 return false;
             }
         });
+
+        listView = (ListView) findViewById(R.id.lv2);
+
+        list = new ArrayList<>();
+        list.add("S1001");
+        list.add("Banana");
+        list.add("Pineapple");
+        list.add("Orange");
+        list.add("Lychee");
+        list.add("Gavava");
+        list.add("Peech");
+        list.add("Melon");
+        list.add("Watermelon");
+        list.add("Papaya");
+
+
+
+
+
+
     }
 }

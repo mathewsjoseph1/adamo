@@ -3,7 +3,7 @@ package com.example.Adama;
 
 
 public class SongCollection {
-    private Song songs[] = new Song[12];
+    public Song songs[] = new Song[12];
 
     public SongCollection() {
         Song savage = new Song("S1001",

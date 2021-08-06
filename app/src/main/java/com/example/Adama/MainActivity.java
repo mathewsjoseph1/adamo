@@ -60,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
         int currentArrayIndex = songCollection.searchSongById(resourceId);
         Log.d("Temasek", "button clicked" + resourceId);
         Log.d("Temasek", "button clicked" + currentArrayIndex);
+        System.out.println(currentArrayIndex);
         sendDataToActivity(currentArrayIndex);
     }
 

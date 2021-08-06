@@ -1,7 +1,7 @@
-/*
-package com.example.Adama;
+/*package com.example.Adama;
 
 import android.view.View;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -14,5 +14,4 @@ public class myview extends RecyclerView.ViewHolder{
      public myview(@NonNull View itemView) {
         super(itemView);
     }
-}
-*/
+}*/

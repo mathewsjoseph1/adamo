@@ -1,20 +1,23 @@
 package com.example.Adama;
-import android.content.Intent;
-import android.os.Handler;
-import android.view.View;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.os.HandlerCompat;
 
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 public class PlaySongActivity extends AppCompatActivity {
     SongCollection songCollection = new SongCollection();
@@ -29,9 +32,13 @@ public class PlaySongActivity extends AppCompatActivity {
     private SeekBar seekBarController;
     Handler handler = new Handler();
     Button repeatBtn;
+    Runnable runnable;
+    private TextView tvCurrentTime, tvTotalTime;
     Button shuffleBtn;
     Boolean repeatFlag = false;
     Boolean shuffleFlag = false;
+    SongCollection originalsongCollection = new SongCollection();
+    List<Song> shuffleList = Arrays.asList(songCollection.songs);
 
 
     @Override
@@ -49,6 +56,10 @@ public class PlaySongActivity extends AppCompatActivity {
         seekBarController.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                /*if (fromUser) {
+                    player.seekTo(progress);
+                    tvCurrentTime.setText(getTimeFormatted(progress));
+                }*/
             }
 
             @Override
@@ -66,6 +77,9 @@ public class PlaySongActivity extends AppCompatActivity {
         seekBarController.setMax(player.getDuration());
         handler.removeCallbacks(bar);
         handler.postDelayed(bar,1000);
+        repeatBtn = findViewById(R.id.repeatBtn);
+        shuffleBtn = findViewById(R.id.shuffleBtn);
+
     }
     Runnable bar = new Runnable() {
         @Override
@@ -95,8 +109,35 @@ public class PlaySongActivity extends AppCompatActivity {
             player.setDataSource(songUrl);
             player.prepare();
             player.start();
-            btnPlayPause.setText("PAUSE");
+            btnPlayPause.setBackgroundResource(R.drawable.ic_baseline_pause_circle_24);
+            //playCycle();
+            //seekBarController.setMax(player.getDuration());
             setTitle(title);
+            /*tvTotalTime.setText(getTimeFormatted(player.getDuration()));
+            if (player.isPlaying()) {
+                btnPlayPause.setBackgroundResource(R.drawable.ic_baseline_pause_circle_24);
+                tvTotalTime.setText(getTimeFormatted(player.getDuration()));
+            }
+
+            seekBarController.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                @Override
+                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                    if (fromUser) {
+                        player.seekTo(progress);
+                        tvCurrentTime.setText(getTimeFormatted(progress));
+                    }
+                }
+
+                @Override
+                public void onStartTrackingTouch(SeekBar seekBar) {
+
+                }
+
+                @Override
+                public void onStopTrackingTouch(SeekBar seekBar) {
+
+                }
+            });*/
             gracefullyStopsWhenMusicEnds();
         }
         catch (IOException e){
@@ -105,46 +146,70 @@ public class PlaySongActivity extends AppCompatActivity {
     }
     public void playOrPauseMusic(View view) {
         if(player.isPlaying()){
-            player.pause();
             seekBarController.setMax(player.getDuration());
             handler.removeCallbacks(bar);
             handler.postDelayed(bar,1000);
-            btnPlayPause.setText("PLAY");
+            player.pause();
+            btnPlayPause.setBackgroundResource(R.drawable.ic_baseline_play_circle_24);
         }else{
             player.start();
             seekBarController.setMax(player.getDuration());
             handler.removeCallbacks(bar);
             handler.postDelayed(bar,1000);
-            btnPlayPause.setText("PAUSE");
+            btnPlayPause.setBackgroundResource(R.drawable.ic_baseline_pause_circle_24);
         }
     }
     private void gracefullyStopsWhenMusicEnds() {
         player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mp) {
-                Toast.makeText(PlaySongActivity.this, "Song ended", Toast.LENGTH_SHORT).show();
-                btnPlayPause.setText("PLAY");
-
+                if (repeatFlag){
+                    playOrPauseMusic(null);
+                }else{
+                    btnPlayPause.setBackgroundResource(R.drawable.ic_baseline_play_circle_24);
+                }
             }
+
         });
+
     }
+
     public void playNext (View view){
-        currentIndex = songCollection.getNextSong(currentIndex);
-        Toast.makeText(this,"after clicking playnext, \n the current index of this song\n"+
-                "in the SongCollecton Array is now: " + currentIndex, Toast.LENGTH_LONG).show();
-        Log.d("temasek", "After playNext, the index is now : "+ currentIndex);
-        displaySongBasedOnIndex(currentIndex);
-        playSong(filelink);
+        if (repeatFlag) {
+            Toast.makeText(getApplicationContext(),"Repeat is on",Toast.LENGTH_SHORT).show();
+        }
+        else{
+                currentIndex = songCollection.getNextSong(currentIndex);
+                Toast.makeText(this, "after clicking playnext, \n the current index of this song\n" +
+                        "in the SongCollecton Array is now: " + currentIndex, Toast.LENGTH_LONG).show();
+                Log.d("temasek", "After playNext, the index is now : " + currentIndex);
+                displaySongBasedOnIndex(currentIndex);
+                playSong(filelink);
+                btnPlayPause.setBackgroundResource(R.drawable.ic_baseline_pause_circle_24);
+                seekBarController.setMax(player.getDuration());
+                handler.removeCallbacks(bar);
+                handler.postDelayed(bar, 1000);
+        }
 
     }
 
     public void playPrevious (View view) {
-        currentIndex = songCollection.getPrevSong(currentIndex);
-        Toast.makeText(this, "after clicking playPrevious, \n the current index of this song\n" +
-                "in the SongCollecton array is now: " + currentIndex, Toast.LENGTH_LONG).show();
-        Log.d("temasek", "After playPrevious, the index is now : " + currentIndex);
-        displaySongBasedOnIndex(currentIndex);
-        playSong(filelink);
+        if (repeatFlag) {
+            Toast.makeText(getApplicationContext(),"Repeat is on",Toast.LENGTH_SHORT).show();
+        }
+        else{
+            currentIndex = songCollection.getPrevSong(currentIndex);
+            Toast.makeText(this, "after clicking playPrevious, \n the current index of this song\n" +
+                    "in the SongCollecton array is now: " + currentIndex, Toast.LENGTH_LONG).show();
+            Log.d("temasek", "After playPrevious, the index is now : " + currentIndex);
+            displaySongBasedOnIndex(currentIndex);
+            playSong(filelink);
+            btnPlayPause.setBackgroundResource(R.drawable.ic_baseline_pause_circle_24);
+            seekBarController.setMax(player.getDuration());
+            handler.removeCallbacks(bar);
+            handler.postDelayed(bar,1000);
+        }
+
     }
     @Override
     public void onBackPressed(){
@@ -152,27 +217,90 @@ public class PlaySongActivity extends AppCompatActivity {
         handler.removeCallbacks(bar);
         player.release();
     }
-
-
     public void addToPlaylist(View view) {
-        String songID = view.getContentDescription().toString();
-        int song = songCollection.searchSongById(songID);
+        /*String songID = view.getContentDescription().toString();
+        int song1 = songCollection.searchSongById(songID);
+        String currentId = songCollection.getCurrentSong()
         Toast.makeText(this,"love is war",Toast.LENGTH_SHORT).show();
         playList.add(song);
-    }
+        for (int i=0 ; i < playList.size();i++) {
+            Log.d("temasek", playList.get(i).toString());*/
+        Bundle songData = this.getIntent().getExtras();
+        int currentIndex = songData.getInt("index");
+        Song song = songCollection.getCurrentSong(currentIndex);
+        title = song.getTitle();
+
+
+        Toast.makeText(this, currentIndex + "", Toast.LENGTH_SHORT).show();
+        /*currentIndex = songCollection.getPrevSong(currentIndex);
+        Toast.makeText(this, currentIndex + "", Toast.LENGTH_SHORT).show();*/
+        }
+
 
 
     public void repeatSong(View view) {
         if (repeatFlag) {
-            repeatBtn.setBackgroundResource(R.drawable.repeat_off);
-
-
-        } else {
-
-            repeatBtn.setBackgroundResource(R.drawable.repeat_on);
-
+            repeatBtn.setBackgroundResource(R.drawable.ic_baseline_repeat_24);
+            Toast.makeText(getApplicationContext(),"REPEAT OFF",Toast.LENGTH_SHORT).show();
         }
-        repeatFlag=!repeatFlag;
-
+        else {
+            repeatBtn.setBackgroundResource(R.drawable.ic_baseline_repeat_on_24);
+            Toast.makeText(getApplicationContext(),"REPEAT ON",Toast.LENGTH_SHORT).show();
+        }
+        repeatFlag =! repeatFlag;
     }
+    public void shuffleSong(View view) {
+        if (shuffleFlag) {
+            shuffleBtn.setBackgroundResource(R.drawable.ic_baseline_shuffle_24);
+            songCollection = new SongCollection();
+        }
+        else {
+            shuffleBtn.setBackgroundResource(R.drawable.ic_baseline_shuffle_on_24);
+            Collections.shuffle(shuffleList);
+            shuffleList.toArray(songCollection.songs);
+        }
+        shuffleFlag =! shuffleFlag;
+    }
+    /*private String getTimeFormatted(long milliSeconds) {
+        String finalTimerString = "";
+        String secondsString;
+
+        //Converting total duration into time
+        int hours = (int) (milliSeconds / 3600000);
+        int minutes = (int) (milliSeconds % 3600000) / 60000;
+        int seconds = (int) ((milliSeconds % 3600000) % 60000 / 1000);
+
+        // Adding hours if any
+        if (hours > 0)
+            finalTimerString = hours + ":";
+
+        // Prepending 0 to seconds if it is one digit
+        if (seconds < 10)
+            secondsString = "0" + seconds;
+        else
+            secondsString = "" + seconds;
+
+        finalTimerString = finalTimerString + minutes + ":" + secondsString;
+
+        // Return timer String;
+        return finalTimerString;
+    }
+    private void playCycle() {
+        try {
+            seekBarController.setProgress(player.getCurrentPosition());
+            tvCurrentTime.setText(getTimeFormatted(player.getCurrentPosition()));
+            if (player.isPlaying()) {
+                runnable = new Runnable() {
+                    @Override
+                    public void run() {
+                        playCycle();
+
+                    }
+                };
+                handler.postDelayed(runnable, 100);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }*/
 }
