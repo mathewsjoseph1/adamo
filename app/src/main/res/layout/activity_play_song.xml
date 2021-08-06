@@ -105,18 +105,31 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtArtist" />
 
-    <ImageView
-        android:id="@+id/addplaylist"
+    <ImageButton
+        android:id="@+id/cancel"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_marginTop="7dp"
-        android:layout_marginEnd="7dp"
-        android:layout_marginRight="7dp"
+        android:background="@color/white"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
         android:onClick="addToPlaylist"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_baseline_playlist_add_24"
         tools:ignore="VectorDrawableCompat" />
+    <Button
+        android:id="@+id/repeatBtn"
+        android:layout_width="63dp"
+        android:layout_height="54dp"
+        android:background="@drawable/repeat_off"
+        android:onClick="repeatSong"
+        app:layout_constraintBottom_toTopOf="@+id/btnNext"
+        app:layout_constraintEnd_toEndOf="@+id/btnNext"
+        app:layout_constraintHorizontal_bias="0.52"
+        app:layout_constraintStart_toStartOf="@+id/btnNext"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

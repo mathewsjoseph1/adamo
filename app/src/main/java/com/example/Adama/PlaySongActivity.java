@@ -3,6 +3,8 @@ import android.content.Intent;
 import android.os.Handler;
 import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.os.HandlerCompat;
+
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Log;
@@ -21,12 +23,15 @@ public class PlaySongActivity extends AppCompatActivity {
     private String artiste = "";
     private String filelink = "";
     private int drawable;
-    private TextView tvCurrentTime, tvTotalTime;
     private int currentIndex = -1;
     private MediaPlayer player = new MediaPlayer();
     private Button btnPlayPause = null;
     private SeekBar seekBarController;
     Handler handler = new Handler();
+    Button repeatBtn;
+    Button shuffleBtn;
+    Boolean repeatFlag = false;
+    Boolean shuffleFlag = false;
 
 
     @Override
@@ -151,12 +156,23 @@ public class PlaySongActivity extends AppCompatActivity {
 
     public void addToPlaylist(View view) {
         String songID = view.getContentDescription().toString();
-        int song = songCollection.searchSongById(songID.toString());
+        int song = songCollection.searchSongById(songID);
+        Toast.makeText(this,"love is war",Toast.LENGTH_SHORT).show();
         playList.add(song);
     }
-    public void gotomy_music(View view){
-        Intent intent = new Intent(this,my_music.class);
-        startActivity(intent);
+
+
+    public void repeatSong(View view) {
+        if (repeatFlag) {
+            repeatBtn.setBackgroundResource(R.drawable.repeat_off);
+
+
+        } else {
+
+            repeatBtn.setBackgroundResource(R.drawable.repeat_on);
 
         }
+        repeatFlag=!repeatFlag;
+
     }
+}

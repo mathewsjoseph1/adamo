@@ -55,14 +55,14 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
-
-     public void handleSelection(View view) {
+    public void handleSelection(View view) {
         String resourceId = getResources().getResourceEntryName(view.getId());
         int currentArrayIndex = songCollection.searchSongById(resourceId);
         Log.d("Temasek", "button clicked" + resourceId);
         Log.d("Temasek", "button clicked" + currentArrayIndex);
         sendDataToActivity(currentArrayIndex);
     }
+
     public void sendDataToActivity(int index){
         Intent intent = new Intent(this,PlaySongActivity.class);
         intent.putExtra("index",index);
