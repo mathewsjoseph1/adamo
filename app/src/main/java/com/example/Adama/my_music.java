@@ -1,31 +1,32 @@
 package com.example.Adama;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
-import android.widget.ListView;
+import android.view.View;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
 
 public class my_music extends AppCompatActivity {
-
+songadapter songadapter;
+RecyclerView playList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ListView listView;
-
-        ArrayList<String> list;
         setContentView(R.layout.activity_my_music);
-
-        /*for (int i = 0; i < PlaySongActivity.playList.size(); i++){
-            Log.d("temasek", PlaySongActivity.playList.get(i).getTitle());
-        }*/
+        playList = findViewById(R.id.recycleview);
+        System.out.println(playList);
+        songadapter = new songadapter(PlaySongActivity.playList);
+        playList.setAdapter(songadapter);
+        playList.setLayoutManager(new LinearLayoutManager(this));
+        ArrayList<String> list;
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setSelectedItemId(R.id.item_3 );
@@ -52,25 +53,20 @@ public class my_music extends AppCompatActivity {
                 return false;
             }
         });
-
-        listView = (ListView) findViewById(R.id.lv2);
-
-        list = new ArrayList<>();
-        list.add("S1001");
-        list.add("Banana");
-        list.add("Pineapple");
-        list.add("Orange");
-        list.add("Lychee");
-        list.add("Gavava");
-        list.add("Peech");
-        list.add("Melon");
-        list.add("Watermelon");
-        list.add("Papaya");
+    }
 
 
+    public void removeAll(View view) {
+        PlaySongActivity.playList.clear();
+        songadapter.notifyDataSetChanged();
+    }
 
-
-
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        startActivity(new Intent(getApplicationContext(), MainActivity.class));
+        overridePendingTransition(0, 0);
 
     }
+
 }

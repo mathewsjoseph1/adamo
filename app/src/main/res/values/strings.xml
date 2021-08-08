@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Adama</string>
+    <string name="app_name">Adamo</string>
     <string name="todo1">TODO</string>
     <string name="songtitle">SongTitle</string>
     <string name="todo2">TODO</string>
@@ -17,4 +17,14 @@
     <string name="song_title">Song Title</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="logintext">Login</string>
+    <string name="Logintext">LOGIN</string>
+    <string name="usernametext">username</string>
+    <string name="passwordtext">password</string>
+    <string name="signuptext">SIGN UP</string>
+    <string name="fullnametext">Full name</string>
+    <string name="emailtext">email</string>
+    <string name="usernametextt">username</string>
+    <string name="loginheretext">Already have an account? CLICK HERE</string>
+    <string name="signupheretextt">Dont have an account? CLICK HERE</string>
 </resources>

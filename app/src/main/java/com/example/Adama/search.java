@@ -25,7 +25,11 @@ public class search extends AppCompatActivity {
     ListView listView;
     ArrayList<String> list;
     ArrayList<String> list1;
-
+    public void sendDataToActivity ( int index){
+        Intent intent = new Intent(this, PlaySongActivity.class);
+        intent.putExtra("index", index);
+        startActivity(intent);
+    }
     ArrayAdapter<String> adapter;
     private MediaPlayer player = new MediaPlayer();
 
@@ -64,62 +68,22 @@ public class search extends AppCompatActivity {
         listView = (ListView) findViewById(R.id.lv1);
 
         list = new ArrayList<>();
-        list.add("S1001");
-        list.add("Banana");
-        list.add("Pineapple");
-        list.add("Orange");
-        list.add("Lychee");
-        list.add("Gavava");
-        list.add("Peech");
-        list.add("Melon");
-        list.add("Watermelon");
-        list.add("Papaya");
-        list.add("S1001");
-        list.add("Banana");
-        list.add("Pineapple");
-        list.add("Orange");
-        list.add("Lychee");
-        list.add("Gavava");
-        list.add("Peech");
-        list.add("Melon");
-        list.add("Watermelon");
-        list.add("Papaya");
-        list.add("S1001");
-        list.add("Banana");
-        list.add("Pineapple");
-        list.add("Orange");
-        list.add("Lychee");
-        list.add("Gavava");
-        list.add("Peech");
-        list.add("Melon");
-        list.add("Watermelon");
-        list.add("Papaya");
-        list.add("S1001");
-        list.add("Banana");
-        list.add("Pineapple");
-        list.add("Orange");
-        list.add("Lychee");
-        list.add("Gavava");
-        list.add("Peech");
-        list.add("Melon");
-        list.add("Watermelon");
-        list.add("Papaya");
+
+        list.add("Savage Love");
+        list.add("Stereo Hearts");
+        list.add("Attention");
+        list.add("Your Love Could Start A War");
+        list.add("Levitating");
+        list.add("I'm a Mess");
+        list.add("Play with Fire");
+        list.add("Thriller");
+        list.add("Shape of You");
+        list.add("Alone");
+        list.add("Dusk Till Dawn");
+        list.add("Havana");
 
 
 
-        list1 = new ArrayList<>();
-        list1.add("S1001");
-        list1.add("Banana");
-        list1.add("Pineapple");
-        list1.add("Orange");
-        list1.add("Lychee");
-        list1.add("Gavava");
-        list1.add("Peech");
-        list1.add("Melon");
-        list1.add("Watermelon");
-        list1.add("Papaya");
-        list1.add("Watermelon");
-        list1.add("Papaya");
 
         adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, list);
         listView.setAdapter(adapter);
@@ -142,53 +106,27 @@ public class search extends AppCompatActivity {
                 return false;
             }
         });
-
-
-        /*listView.setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public void onListItemClick(ListView parent, View view, int position, long id) {
-                Object listItem = list.get(position);
-                Intent n = new Intent(getApplicationContext(), PlaySongActivity.class);
-                n.putExtra("position", position);
-                Toast.makeText(search.this, parent? getItemat+ "", Toast.LENGTH_SHORT).show();
-                startActivity(n);
-               *//* Toast.makeText(search.this, listItem + "", Toast.LENGTH_SHORT).show();
-                String list2 = list1.get(3);
-                //Toast.makeText(search.this, list2+"", Toast.LENGTH_SHORT).show();
-                int list3 = list.indexOf("orange");
-                Toast.makeText(search.this, list3 + "", Toast.LENGTH_SHORT).show();
-                for (int item = 0; item < list1.size(); item++) {
-                    if (list.get(id) == list1.get(item)) {
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Toast.makeText(search.this, list.get(position), Toast.LENGTH_SHORT).show();
+                for (int item = 0; item < list.size(); item++) {
+                    if (list.get(position) == list.get(item)) {
                         sendDataToActivity(item);
                         break;
-
                     }
                 }
-                //sendDataToActivity(1);
             }
-        });*/
+        });
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        startActivity(new Intent(getApplicationContext(), MainActivity.class));
+        overridePendingTransition(0, 0);
 
     }
 }
-    /*public void handleSelection(View view) {
-        String resourceId = getResources().getResourceEntryName(view.getId());
-       /// for(int currentArrayIndex = 0)
-        int currentArrayIndex = 1;
-                ///songCollection.searchSongById(resourceId);
-        Log.d("Temasek", "button clicked" + resourceId);
-        Log.d("Temasek", "button clicked" + currentArrayIndex);
-        //sendDataToActivity(currentArrayIndex);
-
-
-
-    public void sendDataToActivity(int index){
-        Intent intent = new Intent(this,PlaySongActivity.class);
-        intent.putExtra("index",index);
-        startActivity(intent);
-  }  }
-
-*/
-
 
 
 

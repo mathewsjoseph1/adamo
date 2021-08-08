@@ -21,7 +21,7 @@ import java.util.List;
 
 public class PlaySongActivity extends AppCompatActivity {
     SongCollection songCollection = new SongCollection();
-    static ArrayList<Integer> playList = new ArrayList<Integer>();
+    static ArrayList<Song> playList = new ArrayList<Song>();
     private String title = "";
     private String artiste = "";
     private String filelink = "";
@@ -33,6 +33,7 @@ public class PlaySongActivity extends AppCompatActivity {
     Handler handler = new Handler();
     Button repeatBtn;
     Runnable runnable;
+
     private TextView tvCurrentTime, tvTotalTime;
     Button shuffleBtn;
     Boolean repeatFlag = false;
@@ -48,7 +49,6 @@ public class PlaySongActivity extends AppCompatActivity {
         btnPlayPause = findViewById(R.id.btnPlayPause);
         Bundle songData = this.getIntent().getExtras();
         int currentIndex = songData.getInt("index");
-        Log.d("temasek", "we are" + currentIndex);
         displaySongBasedOnIndex(currentIndex);
         playSong(filelink);
 
@@ -79,6 +79,7 @@ public class PlaySongActivity extends AppCompatActivity {
         handler.postDelayed(bar,1000);
         repeatBtn = findViewById(R.id.repeatBtn);
         shuffleBtn = findViewById(R.id.shuffleBtn);
+        System.out.println(shuffleBtn);
 
     }
     Runnable bar = new Runnable() {
@@ -97,6 +98,7 @@ public class PlaySongActivity extends AppCompatActivity {
         filelink = song.getFilelink();
         drawable = song.getDrawable();
         TextView txtTitle = findViewById(R.id.txtSongTitle);
+        System.out.println(txtTitle);
         txtTitle.setText(title);
         TextView txtArtiste = findViewById(R.id.txtArtist);
         txtArtiste.setText(artiste);
@@ -110,34 +112,8 @@ public class PlaySongActivity extends AppCompatActivity {
             player.prepare();
             player.start();
             btnPlayPause.setBackgroundResource(R.drawable.ic_baseline_pause_circle_24);
-            //playCycle();
-            //seekBarController.setMax(player.getDuration());
+
             setTitle(title);
-            /*tvTotalTime.setText(getTimeFormatted(player.getDuration()));
-            if (player.isPlaying()) {
-                btnPlayPause.setBackgroundResource(R.drawable.ic_baseline_pause_circle_24);
-                tvTotalTime.setText(getTimeFormatted(player.getDuration()));
-            }
-
-            seekBarController.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-                @Override
-                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                    if (fromUser) {
-                        player.seekTo(progress);
-                        tvCurrentTime.setText(getTimeFormatted(progress));
-                    }
-                }
-
-                @Override
-                public void onStartTrackingTouch(SeekBar seekBar) {
-
-                }
-
-                @Override
-                public void onStopTrackingTouch(SeekBar seekBar) {
-
-                }
-            });*/
             gracefullyStopsWhenMusicEnds();
         }
         catch (IOException e){
@@ -180,9 +156,6 @@ public class PlaySongActivity extends AppCompatActivity {
         }
         else{
                 currentIndex = songCollection.getNextSong(currentIndex);
-                Toast.makeText(this, "after clicking playnext, \n the current index of this song\n" +
-                        "in the SongCollecton Array is now: " + currentIndex, Toast.LENGTH_LONG).show();
-                Log.d("temasek", "After playNext, the index is now : " + currentIndex);
                 displaySongBasedOnIndex(currentIndex);
                 playSong(filelink);
                 btnPlayPause.setBackgroundResource(R.drawable.ic_baseline_pause_circle_24);
@@ -199,9 +172,6 @@ public class PlaySongActivity extends AppCompatActivity {
         }
         else{
             currentIndex = songCollection.getPrevSong(currentIndex);
-            Toast.makeText(this, "after clicking playPrevious, \n the current index of this song\n" +
-                    "in the SongCollecton array is now: " + currentIndex, Toast.LENGTH_LONG).show();
-            Log.d("temasek", "After playPrevious, the index is now : " + currentIndex);
             displaySongBasedOnIndex(currentIndex);
             playSong(filelink);
             btnPlayPause.setBackgroundResource(R.drawable.ic_baseline_pause_circle_24);
@@ -218,22 +188,12 @@ public class PlaySongActivity extends AppCompatActivity {
         player.release();
     }
     public void addToPlaylist(View view) {
-        /*String songID = view.getContentDescription().toString();
-        int song1 = songCollection.searchSongById(songID);
-        String currentId = songCollection.getCurrentSong()
-        Toast.makeText(this,"love is war",Toast.LENGTH_SHORT).show();
-        playList.add(song);
-        for (int i=0 ; i < playList.size();i++) {
-            Log.d("temasek", playList.get(i).toString());*/
         Bundle songData = this.getIntent().getExtras();
         int currentIndex = songData.getInt("index");
         Song song = songCollection.getCurrentSong(currentIndex);
         title = song.getTitle();
-
-
-        Toast.makeText(this, currentIndex + "", Toast.LENGTH_SHORT).show();
-        /*currentIndex = songCollection.getPrevSong(currentIndex);
-        Toast.makeText(this, currentIndex + "", Toast.LENGTH_SHORT).show();*/
+        playList.add(song);
+        Toast.makeText(getApplicationContext(),"Song Added to Playlist",Toast.LENGTH_SHORT).show();
         }
 
 
@@ -252,11 +212,13 @@ public class PlaySongActivity extends AppCompatActivity {
     public void shuffleSong(View view) {
         if (shuffleFlag) {
             shuffleBtn.setBackgroundResource(R.drawable.ic_baseline_shuffle_24);
+            Toast.makeText(getApplicationContext(),"SHUFFLE OFF",Toast.LENGTH_SHORT).show();
             songCollection = new SongCollection();
         }
         else {
             shuffleBtn.setBackgroundResource(R.drawable.ic_baseline_shuffle_on_24);
             Collections.shuffle(shuffleList);
+            Toast.makeText(getApplicationContext(),"SHUFFLE ON",Toast.LENGTH_SHORT).show();
             shuffleList.toArray(songCollection.songs);
         }
         shuffleFlag =! shuffleFlag;
@@ -284,23 +246,5 @@ public class PlaySongActivity extends AppCompatActivity {
 
         // Return timer String;
         return finalTimerString;
-    }
-    private void playCycle() {
-        try {
-            seekBarController.setProgress(player.getCurrentPosition());
-            tvCurrentTime.setText(getTimeFormatted(player.getCurrentPosition()));
-            if (player.isPlaying()) {
-                runnable = new Runnable() {
-                    @Override
-                    public void run() {
-                        playCycle();
-
-                    }
-                };
-                handler.postDelayed(runnable, 100);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }*/
 }
